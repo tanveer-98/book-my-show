@@ -34,6 +34,7 @@ public interface ShowSeatRepository extends BaseRepository<ShowSeat> {
             @Param("now") LocalDateTime now,
             @Param("expiryTime")LocalDateTime expiryTime
             );
+    /// Note : int returns the updated count of the rows
 
 
     // Query to unlock the seats if

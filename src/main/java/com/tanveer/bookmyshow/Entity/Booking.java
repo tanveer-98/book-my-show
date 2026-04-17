@@ -18,7 +18,7 @@ import java.util.List;
 public class Booking {
 
     public enum BookingStatus {
-        BOOKED,
+        CONFIRMED,
         CANCELLED,
         PENDING,
         FAILED

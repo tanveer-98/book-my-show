@@ -39,9 +39,25 @@ public class BookingService {
 
      */
 
+    // Lock the seats first
 
     @Transactional
-    public BookingResponse bookSeats(List<Long> showSeatIds) {
+    public void lockSeats(List<Long > showSeatIds){
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiryTime = now.plusMinutes(15);
+
+        int updated = showSeatRepository.lockSeats(showSeatIds, now , expiryTime);
+
+        if(updated != showSeatIds.size() ){
+            throw  new SeatBookedException("Some seats already locked");
+        }
+    }
+
+
+
+    @Transactional
+    public BookingResponse createBooking(List<Long> showSeatIds) {
     //Takes seat id's for booking the seats
        // fetch the Seat details first
         BookingResponse bookingResponse = new BookingResponse();
@@ -55,13 +71,12 @@ public class BookingService {
         }
 
         for(ShowSeat showSeat : showSeats ) {
-            if (showSeat.getBooking() != null) {
+            if (showSeat.getStatus() == ShowSeat.ShowSeatStatus.BOOKED) {
                 //   booking.setStatus(booking.setStatus(Status.FAILED)); BAD PRACTICE : put status in payment stage
                 throw new SeatBookedException("Seat Selected is already booked"); // runtime exceptions are Handled by Spring , not the caller so it's better
             }
             //            showSeat.setBooked(true); REDUNDANT
-            showSeat.setBooking(booking);
-
+//            showSeat.setBooking(booking); // WRONG , SET THIS AFTER payment
         }
 
         // set the show
@@ -91,10 +106,54 @@ public class BookingService {
         bookingResponse.setBookingStatus(String.valueOf(booking.getStatus()));
 
 
-        return bookingResponse;
+        return bookingResponse; // TODO : Use Mapper instead
+
+    }
+
+    // Confirm Booking
+
+    @Transactional
+    public void confirmBooking(Long bookingId){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+        for(ShowSeat showSeat : booking.getSeats()){
+            if(showSeat.getStatus() != ShowSeat.ShowSeatStatus.LOCKED){
+                throw new RuntimeException("One of the Seat is not LOCKED ");
+            }
+
+            // set showseat status as Booked
+            showSeat.setStatus(ShowSeat.ShowSeatStatus.BOOKED);
+            showSeat.setBooking(booking);
+            // remove lock
+            showSeat.setLockedAt(null);
+        }
+        // MAKE THE BOOKING AS CONFIRMED FROM PENDING
+        booking.setStatus(Booking.BookingStatus.CONFIRMED);
+        bookingRepository.save(booking);
+        showSeatRepository.saveAll(booking.getSeats());
 
     }
 
 
+    // cancel booking
+
+    @Transactional
+    public void cancelBooking(Long bookingId){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+        booking.setStatus(Booking.BookingStatus.CANCELLED);
+
+        // set all showseats to remove booking details
+
+        for(ShowSeat showSeat : booking.getSeats()){
+            if(showSeat.getStatus() == ShowSeat.ShowSeatStatus.LOCKED || showSeat.getStatus() == ShowSeat.ShowSeatStatus.BOOKED){
+                showSeat.setStatus(ShowSeat.ShowSeatStatus.AVAILABLE);
+                showSeat.setBooking(null);
+                showSeat.setLockedAt(null);
+            }
+        }
+
+        booking.setStatus(Booking.BookingStatus.CANCELLED);
+        showSeatRepository.saveAll(booking.getSeats());
+        bookingRepository.save(booking);
+    }
 
 }
