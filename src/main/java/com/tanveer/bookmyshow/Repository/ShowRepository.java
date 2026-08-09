@@ -12,10 +12,12 @@ public interface ShowRepository extends BaseRepository<Show> {
     List<Show> findByScreen_Theater_City_Id(Long cityId);
 
     /*
-        SELECT * FROM show
-        JOIN screen
-        JOIN theater
-        WHERE city_id = ?
+        SELECT s.*
+        FROM shows s
+        JOIN screen sc ON s.screen_id = sc.id
+        JOIN theater t ON sc.theater_id = t.id
+        JOIN city c ON t.city_id = c.id
+        WHERE c.id = ?
      */
 
 //     AFTER creating the repository now you need to use it via service class.

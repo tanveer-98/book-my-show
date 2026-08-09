@@ -21,9 +21,9 @@ public class Seat {
 
 
     @Column(name = "row_num") // without this hibernate tries to create table with row_number which is a reserved keyword and the code breaks
-    private int rowNumber;
+    private String rowNumber; // A , B , C
 
-    private int seatNumber;
+    private String seatNumber; // A1 , A2 , A3
 
     @Enumerated(EnumType.STRING) // without this annootaiton hibernate stores it as 0,1,2 values
     private SeatCategory seatCategory;

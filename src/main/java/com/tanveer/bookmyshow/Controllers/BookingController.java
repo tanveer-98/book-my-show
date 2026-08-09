@@ -2,8 +2,6 @@ package com.tanveer.bookmyshow.Controllers;
 
 
 import com.tanveer.bookmyshow.Dto.BookingResponse;
-import com.tanveer.bookmyshow.Entity.Booking;
-import com.tanveer.bookmyshow.Entity.ShowSeat;
 import com.tanveer.bookmyshow.Service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +21,7 @@ public class BookingController {
     @PostMapping("/book")
     public BookingResponse booking(@RequestBody List<Long> seatIds){
 
-        return bookingService.bookSeats(seatIds);
+        return bookingService.createBooking(seatIds);
 
     }
 

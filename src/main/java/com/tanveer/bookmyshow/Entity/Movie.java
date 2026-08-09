@@ -1,11 +1,10 @@
 package com.tanveer.bookmyshow.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,6 +14,14 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
 
+    @Column(unique = true , nullable = false)
     private String name ;
+
+    private String thumbnailUrl;
+
+    private LocalDateTime releaseDate;
+
+    private String genre;
+
     private int durationInMinutes;
 }

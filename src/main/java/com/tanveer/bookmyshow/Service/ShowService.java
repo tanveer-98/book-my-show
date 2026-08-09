@@ -10,7 +10,7 @@ import java.util.List;
 public class ShowService {
 // SERVICE USES THE REPOSITORY
 
-    public final ShowRepository showRepository;
+    private final ShowRepository showRepository;
 
     public ShowService(ShowRepository showRepository) {
         this.showRepository = showRepository;
