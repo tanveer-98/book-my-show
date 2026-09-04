@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ import java.util.List;
 public class Show {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name="movie_id")
@@ -26,7 +25,9 @@ public class Show {
     private Screen screen; // Many shows can run on the same screen but at differnet times
 
 
-    private LocalDateTime startTime;
+    private LocalTime startTime;
+
+    private LocalDate showDate;
 
     //   private Duration duration; not needed duration can be taken from movie
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,7 +22,8 @@ public class Movie {
 
     private LocalDateTime releaseDate;
 
-    private String genre;
+    @ManyToMany
+    private Set<Genre> genres;
 
     private int durationInMinutes;
 }

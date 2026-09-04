@@ -1,6 +1,9 @@
 package com.tanveer.bookmyshow.Repository;
 
+import com.tanveer.bookmyshow.Dto.ShowResponseDto;
 import com.tanveer.bookmyshow.Entity.Show;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,7 +12,30 @@ import java.util.List;
 public interface ShowRepository extends BaseRepository<Show> {
     List<Show> findByMovieId(Long movieId);
 //   Spring automatically writes the query :  SELECT * FROM show WHERE movie_id = ?;
-    List<Show> findByScreen_Theater_City_Id(Long cityId);
+
+
+    @Query(
+            """ 
+                select new com.tanveer.bookmyshow.Dto.ShowResponseDto(
+                            s.id,
+                            m.id,
+                            m.name,
+                            m.thumbnailUrl,
+                            m.durationInMinutes,
+                            t.id,
+                            t.address ,
+                            sc.id,
+                            s.showDate,
+                            s.startTime
+                            )
+               FROM Show s
+               JOIN s.screen sc
+               JOIN s.movie m
+               JOIN sc.theater t
+               WHERE t.city.id = :cityId
+            """
+    )
+    List<ShowResponseDto> findShowsByCityId(@Param("cityId") Long cityId);
 
     /*
         SELECT s.*

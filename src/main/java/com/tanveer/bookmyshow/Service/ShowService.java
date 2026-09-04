@@ -1,5 +1,6 @@
 package com.tanveer.bookmyshow.Service;
 
+import com.tanveer.bookmyshow.Dto.ShowResponseDto;
 import com.tanveer.bookmyshow.Entity.Show;
 import com.tanveer.bookmyshow.Repository.ShowRepository;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,8 @@ public class ShowService {
     public ShowService(ShowRepository showRepository) {
         this.showRepository = showRepository;
     }
-    public List<Show> getShowByCity(Long cityId){
-        return showRepository.findByScreen_Theater_City_Id(cityId);
+    public List<ShowResponseDto> getShowByCity(Long cityId){
+        return showRepository.findShowsByCityId(cityId);
     }
 
     public List<Show> getShowByMovieId ( Long movieId){

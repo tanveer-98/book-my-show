@@ -1,9 +1,12 @@
 package com.tanveer.bookmyshow.Entity;
 
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 // a show seat is create when there is a show
@@ -56,6 +59,10 @@ public class ShowSeat {
     private ShowSeatStatus status ;
 
     private LocalDateTime lockedAt; // store the time when it was locked so it can be made available after some time
+
+
+    @Column(nullable = false , precision = 10 , scale = 2)
+    private BigDecimal price;
 
 //    private boolean isBooked; REDUNDANT , you can simply check if booking == null or not // BAD CODE PRACTICE // BASIC // LOCKING SEAT CANNOT BE IMPLEMENTED WITH THIS
 

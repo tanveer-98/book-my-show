@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -18,7 +19,7 @@ public class BookingResponse {
 
     private String screenName;
 
-    private LocalDateTime showTime;
+    private LocalTime showTime;
 
     private List<String> seats;
 

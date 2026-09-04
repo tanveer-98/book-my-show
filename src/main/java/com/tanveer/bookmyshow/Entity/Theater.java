@@ -12,7 +12,7 @@ import java.util.List;
 public class Theater {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Long id;
 
 
     String address;

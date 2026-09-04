@@ -1,5 +1,6 @@
 package com.tanveer.bookmyshow.Controllers;
 
+import com.tanveer.bookmyshow.Dto.ShowResponseDto;
 import com.tanveer.bookmyshow.Entity.Show;
 import com.tanveer.bookmyshow.Service.ShowService;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/shows")
+@RequestMapping("/api/shows")
 public class ShowController {
     private final ShowService showService;
 
@@ -31,7 +32,7 @@ public class ShowController {
     // Get shows by cityId
 
     @GetMapping("/city/{cityId}")
-    public List<Show> getShowsByCityId( @PathVariable Long cityId){
+    public List<ShowResponseDto> getShowsByCityId(@PathVariable Long cityId){
         return showService.getShowByCity(cityId);
     }
 

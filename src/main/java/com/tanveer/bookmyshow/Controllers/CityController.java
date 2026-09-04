@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cities")
+@RequestMapping("/api/cities")
 public class CityController {
 
     private final CityService cityService;
