@@ -24,6 +24,7 @@ public interface MovieRepository extends BaseRepository<Movie> {
         JOIN s.movie m
         JOIN sc.theater t
         WHERE t.city.id = :cityId
+        ORDER BY m.releaseDate
     """)
     List<MovieResponseDto> getMoviesByCityId(@Param("cityId") Long cityId);
 }

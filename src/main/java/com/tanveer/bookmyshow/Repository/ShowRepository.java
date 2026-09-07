@@ -58,6 +58,7 @@ public interface ShowRepository extends BaseRepository<Show> {
                WHERE 1=1
                AND t.city.id = :cityId
                AND m.id = :movieId
+               ORDER BY s.showDate
     """)
     List<ShowResponseDto> findShowsByMovieIdCityId(@Param("movieId") Long movieId ,   @Param("cityId") Long cityId);
 
