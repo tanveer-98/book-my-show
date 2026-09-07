@@ -37,6 +37,31 @@ public interface ShowRepository extends BaseRepository<Show> {
     )
     List<ShowResponseDto> findShowsByCityId(@Param("cityId") Long cityId);
 
+
+    @Query("""
+          select new com.tanveer.bookmyshow.Dto.ShowResponseDto(
+                            s.id,
+                            m.id,
+                            m.name,
+                            m.thumbnailUrl,
+                            m.durationInMinutes,
+                            t.id,
+                            t.address ,
+                            sc.id,
+                            s.showDate,
+                            s.startTime
+                            )
+               FROM Show s
+               JOIN s.screen sc
+               JOIN s.movie m
+               JOIN sc.theater t
+               WHERE 1=1
+               AND t.city.id = :cityId
+               AND m.id = :movieId
+    """)
+    List<ShowResponseDto> findShowsByMovieIdCityId(@Param("movieId") Long movieId ,   @Param("cityId") Long cityId);
+
+
     /*
         SELECT s.*
         FROM shows s

@@ -1,5 +1,6 @@
 package com.tanveer.bookmyshow.Controllers;
 
+import com.tanveer.bookmyshow.Dto.MovieResponseDto;
 import com.tanveer.bookmyshow.Entity.City;
 import com.tanveer.bookmyshow.Entity.Movie;
 import com.tanveer.bookmyshow.Service.MovieService;
@@ -32,5 +33,10 @@ public class MovieController {
         return movieService.getAllMovies();
     }
 
+
+    @GetMapping("/city/{cityId}")
+    public List<MovieResponseDto> getMoviesByCityId(@PathVariable("cityId") Long cityId){
+        return movieService.getShowMoviesByCityId(cityId);
+    }
 
 }

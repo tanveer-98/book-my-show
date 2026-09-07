@@ -48,4 +48,11 @@ public class ShowController {
     public List<Show> getAllShows(){
         return showService.getAllShows();
     }
+
+
+    @GetMapping("/movies/{movieId}/city/{cityId}")
+    public List<ShowResponseDto> getShowsByMovieIdCityId(@PathVariable Long movieId ,@PathVariable Long cityId){
+        return showService.getShowsByMovieIdCityId(movieId,cityId);
+    }
+
 }

@@ -25,5 +25,5 @@ public class Movie {
     @ManyToMany
     private Set<Genre> genres;
 
-    private int durationInMinutes;
+    private Integer durationInMinutes;
 }

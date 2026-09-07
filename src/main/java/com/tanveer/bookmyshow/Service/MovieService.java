@@ -1,5 +1,6 @@
 package com.tanveer.bookmyshow.Service;
 
+import com.tanveer.bookmyshow.Dto.MovieResponseDto;
 import com.tanveer.bookmyshow.Entity.Movie;
 import com.tanveer.bookmyshow.Repository.MovieRepository;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,10 @@ public class MovieService {
 
     public List<Movie> getAllMovies(){
         return movieRepository.findAll();
+    }
+
+    public List<MovieResponseDto> getShowMoviesByCityId(Long cityId){
+        return movieRepository.getMoviesByCityId(cityId);
     }
 
 

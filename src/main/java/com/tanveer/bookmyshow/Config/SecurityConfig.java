@@ -42,7 +42,8 @@ public class SecurityConfig {
                                 auth.requestMatchers("/api/auth/**" ,
                                                 "/api/cities/**",
                                                 "/api/movies/**",
-                                                "/api/shows/**")
+                                                "/api/shows/**"
+                                                )
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated()
