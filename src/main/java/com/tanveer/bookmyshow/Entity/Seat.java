@@ -17,7 +17,7 @@ public class Seat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id ;
+    private Long id ;
 
 
     @Column(name = "row_num") // without this hibernate tries to create table with row_number which is a reserved keyword and the code breaks

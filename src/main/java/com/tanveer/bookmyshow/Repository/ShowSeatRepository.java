@@ -1,5 +1,6 @@
 package com.tanveer.bookmyshow.Repository;
 
+import com.tanveer.bookmyshow.Dto.ShowSeatResponseDto;
 import com.tanveer.bookmyshow.Entity.ShowSeat;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.Lock;
@@ -41,23 +42,43 @@ public interface ShowSeatRepository extends BaseRepository<ShowSeat> {
 
     @Modifying
     @Query("""
-        UPDATE ShowSeat s 
+        UPDATE ShowSeat s
         SET s.status = 'AVAILABLE'
-        WHERE s.status = 'LOCKED' AND 
+        WHERE s.status = 'LOCKED' AND
         s.lockedAt < :expiryTime
     """)
     int releaseExpiredSeats(@Param("expiryTime") LocalDateTime expiryTime);
 
 
-    // 💳 STEP 4: Fetch seats for booking confirmation
+    @Query("""
+       select new com.tanveer.bookmyshow.Dto.ShowSeatResponseDto(
+        ss.id,
+         ss.lockedAt,
+         ss.status,
+         b.id,
+         s.rowNumber,
+         s.seatNumber,
+         s.seatCategory,
+         sh.id,
+         ss.price
+        )
+        FROM ShowSeat ss
+        LEFT JOIN ss.booking b
+        JOIN ss.seat s
+        JOIN ss.show sh
+        WHERE sh.id = :showId
+    """)
+    List<ShowSeatResponseDto> findShowsByShowId(@Param("showId")Long showId);
+
+    // STEP 4: Fetch seats for booking confirmation
     List<ShowSeat> findAllByIdIn(List<Long> seatIds);
 
 
-    // 🔍 Optional: Get seats by status (useful for analytics / UI)
+    //  Optional: Get seats by status (useful for analytics / UI)
     List<ShowSeat> findByShowIdAndStatus(Long showId, ShowSeat.ShowSeatStatus status);
 
 
-    // 🔍 Optional: Validate all seats belong to same show
+    //  Optional: Validate all seats belong to same show
     @Query("""
         SELECT COUNT(DISTINCT s.show.id)
         FROM ShowSeat s
