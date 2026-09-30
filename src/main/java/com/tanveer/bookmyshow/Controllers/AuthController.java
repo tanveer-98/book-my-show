@@ -8,6 +8,9 @@ import com.tanveer.bookmyshow.Dto.UserResponseDto;
 import com.tanveer.bookmyshow.Entity.User;
 import com.tanveer.bookmyshow.Service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -22,18 +25,51 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public AuthenticationResponseDto createUser(
+    public ResponseEntity<Void> createUser(
             @RequestBody RegisterRequestDto requestBody
     ){
-        return authenticationService.register(requestBody);
+        AuthenticationResponseDto authenticationResponse =  authenticationService.register(requestBody);
+
+        ResponseCookie cookie = ResponseCookie.from("accessToken" , authenticationResponse.accessToken())
+                .httpOnly(true)
+                .secure(false) // set to true for production for https
+                .path("/") // Available for the entire domain
+                .maxAge(3600)
+                .sameSite("Lax")
+                .build();
+
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE , cookie.toString())
+                .build();
+
+
     }
 
 
     @PostMapping("/login")
-    public AuthenticationResponseDto loginUser(
+    public ResponseEntity<Void> loginUser(
             @RequestBody LoginRequestDto requestBody
             ){
-        return authenticationService.login(requestBody);
+        // store the response
+
+        AuthenticationResponseDto authenticationResponse = authenticationService.login(requestBody);
+
+        // store it in http only cookie
+
+        ResponseCookie cookie = ResponseCookie.from("accessToken" , authenticationResponse.accessToken())
+                .httpOnly(true)
+                .secure(false) // set to true for production for https
+                .path("/") // Availa ble for the entire domain
+                .maxAge(3600)
+                .sameSite("Lax")
+                .build();
+
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE , cookie.toString())
+                .build();
+
     }
 
     @GetMapping("/me")
